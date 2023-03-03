@@ -1,1 +1,1 @@
-# Caso de estudio aplicacion de analitica en RRHH
+# Caso de estudio aplicación de analítica en RRHH
