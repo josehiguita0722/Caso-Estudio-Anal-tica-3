@@ -1,1 +1,10 @@
+"""-----------------------Importamos librerias----------------"""
+import pandas as pd
+import numpy as np
+import plotly.express as px
+import matplotlib.pyplot as plt
+from plotly.subplots import make_subplots
 
+"""-------------------------Enlazamos Drive-------------------"""
+from google.colab import drive
+drive.mount('/content/drive')
