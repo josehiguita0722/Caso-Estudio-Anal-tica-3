@@ -6,5 +6,4 @@ import matplotlib.pyplot as plt
 from plotly.subplots import make_subplots
 
 """-------------------------Enlazamos Drive-------------------"""
-from google.colab import drive
-drive.mount('/content/drive')
+retirement_info = pd.read_csv('retirement_info.csv', sep=';')
