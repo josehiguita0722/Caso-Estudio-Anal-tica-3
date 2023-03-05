@@ -1,9 +1,0 @@
-"""-----------------------Importamos librerias----------------"""
-import pandas as pd
-import numpy as np
-import plotly.express as px
-import matplotlib.pyplot as plt
-from plotly.subplots import make_subplots
-
-"""-------------------------Enlazamos Drive-------------------"""
-retirement_info = pd.read_csv('retirement_info.csv', sep=';')
