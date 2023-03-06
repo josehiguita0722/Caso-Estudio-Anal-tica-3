@@ -34,6 +34,11 @@ data_rrhh = data_rrhh.set_index('EmployeeID') #Convertimos el número de emplead
 
 data_rrhh
 
+#Al realizar el one hot, se identifica que Human Resources aparece cualitativamente en más de un feature.
+data_rrhh.Department = data_rrhh.Department.replace({"Human Resources": 'Dept. Human Resources'})
+data_rrhh.JobRole = data_rrhh.JobRole.replace({'Human Resources': 'Rol.Human Resources'})
+data_rrhh.EducationField = data_rrhh.EducationField.replace({'Human Resources': 'Educ.Human Resources'})
+
 """## Label Encoding"""
 
 ohencoder = OneHotEncoder(sparse= False) #Se carga el codigo necesario para poder convertir los datos cualitativos en cuantitativos
@@ -55,6 +60,8 @@ data_rrhh.dtypes
 df3 = pd.concat([df.reset_index(drop=True), df2.reset_index(drop=True)], axis = 1) #Se unen las variables cuantitativas y las cualitativas transformadas a cuantitativas
 
 df3.head(3)  # Visualización de data frame
+
+
 
 """# Feature Selection
 
@@ -81,7 +88,8 @@ temp2 = np.array(est_ajustado.scores_) #Genero un temporal con los puntajes de l
 df4 = df3.copy()  #Se Muestra el puntaje K-Best asociado a cada variable en orden descendente para analizar las variables más representativas del modelo
 df4.drop(columns = 'Resignation', inplace = True)
 FS = pd.DataFrame({'Var':df4.columns,'KBest':temp2})
-FS.sort_values(by = 'KBest', ascending = False)
+FS1=FS.sort_values(by = 'KBest', ascending = False).reset_index()
+#hora salida, Single, TotalWorkingYears, 
 
 """##Recursive Feature Elimination"""
 
@@ -96,7 +104,7 @@ df4 = df3.copy() #Se muestran las variables seleccionadas por el método RFE
 df4.drop(columns = 'Resignation', inplace = True)
 temp2 = np.array((est_ajustado.support_))
 FS = pd.DataFrame({'Var':df4.columns,'RFE':temp2})
-FS[FS['RFE'] == True]
+FS2=FS[FS['RFE'] == True].reset_index()
 
 """##Feature Importance"""
 
@@ -110,4 +118,29 @@ temp3 = np.array(modelo.feature_importances_) #Se genera un temporal para los re
 df4 = df3.copy() #Se imprimen las variables más significativas para el modelo según este método
 df4.drop(columns = 'Resignation', inplace = True)
 FS = pd.DataFrame({'Var':df4.columns,'values':temp3})
-FS.sort_values(by = 'values', ascending = False)
+FS3=FS.sort_values(by = 'values', ascending = False).reset_index()
+
+"""Comparamos los 3 métodos para encontrar las variables similares entre ellos"""
+import funciones as fd
+temp=fd.comparar(FS1['Var'],FS2['Var'])
+features= fd.comparar(temp,FS3['Var'])
+#Adicional a las features anteriores, se necesita agregar algunas variables que son parte de la misma categoría anteriormente cualitativa
+
+bd=pd.DataFrame(data=df3[features])
+bd['Medical']= df3['Medical']
+bd['Marketing']= df3['Marketing']
+bd['Technical Degree']= df3['Technical Degree']
+bd['Life Sciences']= df3['Life Sciences']
+bd['Other']=df3['Other']
+
+#También se agregaran las variables que en los mérodos de selección obtuvieron los mejores puntajes
+
+bd['hora_salida']=df3['hora_salida']
+bd['TotalWorkingYears']=df3['TotalWorkingYears']
+bd['Age']=df3['Age']
+bd['JobSatisfaction']=df3['JobSatisfaction']
+bd['WorkLifeBalance']=df3['WorkLifeBalance']
+bd['YearsWithCurrManager']=df3['YearsWithCurrManager']
+bd['EnvironmentSatisfaction']=df3['EnvironmentSatisfaction']
+bd['YearsSinceLastPromotion']=df3['YearsSinceLastPromotion']
+
