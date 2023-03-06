@@ -265,9 +265,6 @@ bd #Visualizamos
 #Para el análsiis se podría estudiar en promedio a qué hora llegaban las personas que renunciaron y compararlo con el promedio de las demás personas
 bd2= bd[bd['Resignation']==0]
 
-#Necesitamos que el índice sea el empleado para poder transponerla y facilitar el análisis
-bd=bd.set_index('EmployeeID')
-
 #Transponemos
 bd=bd.T
 
@@ -358,9 +355,6 @@ bd #Visualizamos
 
 #Para el análsiis se podría estudiar en promedio a qué hora llegaban las personas que renunciaron y compararlo con el promedio de las demás personas
 bd2= bd[bd['Resignation']==0]
-
-#Necesitamos que el índice sea el empleado para poder transponerla y facilitar el análisis
-bd=bd.set_index('EmployeeID')
 
 #Transponemos
 bd=bd.T
@@ -500,6 +494,10 @@ bd=encuesta_empleados.merge(renuncias,how='left',on='EmployeeID').fillna(0) #Uni
 bd #Visualizamos
 
 bd=bd[bd['Resignation']==1] #Base de datos para analizar los resultados de solo las personas que renunciaron
+
+bd = bd.reset_index()
+
+bd
 
 #¿Cómo afecta el balance entre el trabajo y la vida personal en la satisfacción con el ambiente laboral? 
 #¿Cómo afecta la satisfacción laboral al balance entre la vida y el trabajo?
