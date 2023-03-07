@@ -35,7 +35,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random
 
 #Creamos el modelo con SGDClassifier
 
-modelo1 = make_pipeline(StandardScaler(), SGDClassifier(max_iter=1000, tol=1e-3))
+modelo1 =  SGDClassifier(max_iter=1000, tol=1e-3)
 
 modelo1.fit(X_train, y_train)
 
@@ -45,14 +45,16 @@ y_pred1=modelo1.predict(X_test)
 
 #Creamos el modelo linear lienar SVC 
 
-modelo2= make_pipeline(StandardScaler(), LinearSVC(random_state=0, tol=1e-5))
+modelo2= LinearSVC(random_state=0, tol=1e-5)
 modelo2.fit(X_train, y_train)
 y_pred2=modelo2.predict(X_test)
 
+#Modelo KNeighbors
 modelo3=KNeighborsClassifier(n_neighbors=3)
 modelo3.fit(X_train, y_train)
 y_pred3=modelo3.predict(X_test)
 
+#Modelo RandomForestClassifier
 modelo4= RandomForestClassifier(n_estimators=100, bootstrap = True, verbose=2, max_features = 'sqrt')
 modelo4.fit(X_train, y_train)
 y_pred4=modelo4.predict(X_test)
@@ -85,6 +87,7 @@ fd.metricas(modelo4,X_train,y_train,X_test,y_test,y_pred4)
 #El modelo predijo personas que renunciarían y si lo hicieron en un 89.2%, pero predijo personas que renunciarían y si lo hicieron en un 87%
 
 """----Afinamiento de hiperparametros---"""
+
 modelos=[modelo1,modelo2,modelo3,modelo4]
 
 #DataFrame de resultados
@@ -115,7 +118,7 @@ from sklearn.model_selection import RepeatedStratifiedKFold
 #Los hiperparametros a cambiar se eligen en la sección de ayuda de cada uno de los modelos
 
 #SGDClassifier
-loss = ['modified_huber', 'log'] #Método
+loss = ['hinge', 'modified_huber', 'log'] #Método
 penalty = ['l1','l2'] #Penalidad de error
 alpha= [0.0001,0.001,0.01,0.1] 
 l1_ratio= [0.15,0.05,.025]
@@ -124,9 +127,8 @@ sgd_grid = dict(loss=loss,penalty=penalty,max_iter=max_iter,alpha=alpha,l1_ratio
 
 #Linear SCV
 peanlty=['l1','l2']
-loss = ['squared_hinge']
+loss = ['hinge', 'squared_hinge']
 max_iter = [1,5,10,100,1000,10000]
-error_score='raise'
 scv_grid=dict(penalty=penalty, loss=loss, max_iter=max_iter)
 
 #KNeighbors
@@ -136,7 +138,7 @@ metric = ['euclidean', 'manhattan', 'minkowski']
 knn_grid = dict(n_neighbors=n_neighbors,weights=weights,metric=metric)
 
 #RandomForest
-n_estimators = [10, 100, 1000]
+n_estimators = [10, 100, 1000,10000]
 class_weight=["balanced", "balanced_subsample",None]
 max_features = ['sqrt', 'log2']
 forest_grid=dict(n_estimators=n_estimators,class_weight=class_weight,max_features=max_features)
@@ -162,11 +164,5 @@ result.head()
 
 from sklearn.model_selection import RandomizedSearchCV
 
-col = 0
-for ind in range(0,len(models)):
-    cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, 
-                                 random_state=1)
-    n_iter_search = 3
 random_search = RandomizedSearchCV(modelos[col], 
-                param_distributions=grids[col],n_iter=n_iter_search, 
-                cv=cv)
+                param_distributions=grids[col], cv=cv)
