@@ -63,6 +63,8 @@ renuncias
 
 general_empleados = pd.read_csv('https://raw.githubusercontent.com/josehiguita0722/Caso-Estudio-Anal-tica-3/main/general_data.csv', sep=';')
 
+general_empleados['Department'].unique()
+
 """-------------------Verificamos su correcta carga-----------------------"""
 
 general_empleados
@@ -135,6 +137,13 @@ general_empleados1['JobRole'].unique() # Hay 9 tipos de puestos de trabajos
 general_empleados1['MaritalStatus'].unique() #'Married', 'Single', 'Divorced' = 'Casado', 'Soltero', 'Divorciado'
 general_empleados1['Over18'].unique() #Todos los empleados son mayor de edad
 
+#Eliminamos estás columnas ya que son features que no van a influir en la variable respuesta para cuando se llegue al feature selection
+del(general_empleados1['EmployeeCount'])
+del(general_empleados1['Over18'])
+del(general_empleados1['StandardHours'])
+
+general_empleados1
+
 """**Gráficos de pastel**"""
 
 # Gráfico de pastel CORREGIDO
@@ -164,11 +173,37 @@ fig = px.pie(general_empleados['Gender'].unique(), values = general_empleados['G
 
 fig.show()
 
-del(general_empleados1['EmployeeCount'])
-del(general_empleados1['Over18'])
-del(general_empleados1['StandardHours'])
+#Realizamos un merge entre ambas bases para poder realizar gráficos con nuestra variable tarjet.
+datagraficos = general_empleados1.merge(renuncias,how='left',on='EmployeeID')
+datagraficos
 
-general_empleados1
+# Gráfico de pastel de Departamento
+
+# Creating plot
+basegraficar = datagraficos.groupby(['Department'])[['Resignation']].count().sort_values('Resignation', ascending = False).reset_index()
+basegraficar.head()
+
+fig = px.pie(basegraficar, values = basegraficar['Resignation'],  names = basegraficar['Department'],
+        title = '<b>Renuncias por Departamento<b>',
+             color_discrete_sequence = px.colors.qualitative.G10
+        )
+
+fig.show() #Observamos que el departamento donde hay más renuncias es el de desarrollo e investigación, 
+           #de lo cual tampoco se puede inferir mucho ya que es el departamento con más empleados, lo que sería entendible que sea el que más renuncias tenga.
+
+# Gráfico de pastel 
+
+# Creating plot
+basegraficar = datagraficos.groupby(['Gender'])[['Resignation']].count().sort_values('Resignation', ascending = False).reset_index()
+basegraficar.head()
+
+fig = px.pie(basegraficar, values = basegraficar['Resignation'],  names = basegraficar['Gender'],
+        title = '<b>Renuncias Hombres vs Mujeres<b>',
+             color_discrete_sequence = px.colors.qualitative.G10
+        )
+
+fig.show() #Observamos que los hombres renuncian más que las mujeres de lo cual se puede deducir que los retiros no están asociados a una discriminación de genero, 
+           # teniendo en cuenta que hay proporcionalmente más hombres que mujeres en la empresa.
 
 """## Base de Datos Encuesta de Desempeño de Empleados"""
 
