@@ -63,7 +63,7 @@ df3 = pd.concat([df.reset_index(drop=True), df2.reset_index(drop=True)], axis = 
 
 df3.head(3)  # Visualización de data frame
 
-
+joblib.dump(df3,'bd_df3.pkl') 
 
 """# Feature Selection
 
