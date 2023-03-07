@@ -143,4 +143,6 @@ bd['WorkLifeBalance']=df3['WorkLifeBalance']
 bd['YearsWithCurrManager']=df3['YearsWithCurrManager']
 bd['EnvironmentSatisfaction']=df3['EnvironmentSatisfaction']
 bd['YearsSinceLastPromotion']=df3['YearsSinceLastPromotion']
+bd['Resignation']=df3['Resignation']
+bd.to_csv('bd.csv')
 
