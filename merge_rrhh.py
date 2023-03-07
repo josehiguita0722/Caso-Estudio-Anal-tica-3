@@ -14,6 +14,8 @@ from sklearn.feature_selection import SelectKBest,f_regression
 from sklearn.linear_model import LinearRegression
 from sklearn.feature_selection import RFE
 from sklearn.ensemble import ExtraTreesRegressor
+import funciones
+import joblib
 
 df_retirement_info = pd.read_csv('https://raw.githubusercontent.com/josehiguita0722/Caso-Estudio-Anal-tica-3/main/df_renuncias.csv')
 df_general_empleados = pd.read_csv('https://raw.githubusercontent.com/josehiguita0722/Caso-Estudio-Anal-tica-3/main/df_general_empleados1.csv')
@@ -133,7 +135,7 @@ bd['Technical Degree']= df3['Technical Degree']
 bd['Life Sciences']= df3['Life Sciences']
 bd['Other']=df3['Other']
 
-#También se agregaran las variables que en los mérodos de selección obtuvieron los mejores puntajes
+#También se agregaran las variables que en los métodos de selección obtuvieron los mejores puntajes
 
 bd['hora_salida']=df3['hora_salida']
 bd['TotalWorkingYears']=df3['TotalWorkingYears']
@@ -145,4 +147,15 @@ bd['EnvironmentSatisfaction']=df3['EnvironmentSatisfaction']
 bd['YearsSinceLastPromotion']=df3['YearsSinceLastPromotion']
 bd['Resignation']=df3['Resignation']
 bd.to_csv('bd.csv')
+
+"""---Exportaciones---"""
+
+list_cuali=['retirementType', 'Department', 'BusinessTravel', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus', 'Over18']
+joblib.dump(list_cuali, "list_cuali.pkl") ### para realizar imputacion
+list_dummies=['BusinessTravel', 'Department', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus']
+joblib.dump(list_dummies, "list_dummies.pkl") #Variables que se deben transformar a dummies
+list_variables=[]
+for i in range(len(bd.columns)-1):
+    list_variables.append(bd.columns[i])
+joblib.dump(list_variables, "list_variables.pkl") #Variables que se deben transformar a dummies
 

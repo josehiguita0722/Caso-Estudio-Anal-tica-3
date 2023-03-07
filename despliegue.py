@@ -11,7 +11,7 @@ import sqlite3 as sql
 import joblib
 import openpyxl ## para exportar a excel
 import numpy as np
-
+import funciones 
 
 ###### el despliegue consiste en dejar todo el código listo para una ejecucion automática en el periodo definido:
 ###### en este caso se ejecutara el proceso de entrenamiento y prediccion anualmente.
@@ -20,12 +20,12 @@ if __name__=="__main__":
 
     ### conectarse a la base de datos ###
     bd=pd.read_csv('https://raw.githubusercontent.com/josehiguita0722/Caso-Estudio-Anal-tica-3/main/bd.csv')
-    cur=conn.cursor()
+
 
     ### Ejecutar sql de preprocesamiento inicial y juntarlo 
     #### con base de preprocesamiento con la que se entrenó para evitar perdida de variables por conversión a dummies
-
-    funciones.ejecutar_sql('preprocesamientos2.sql',cur) ### con las fechas actualizadas explicativas 2023- predecir 2024
+    
+    
     df=pd.read_sql('''select  * from base_completa2''',conn)
 
   
