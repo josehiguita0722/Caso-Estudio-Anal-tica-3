@@ -232,7 +232,7 @@ desempeno['JobInvolvement'].value_counts()
 
 desempeno.dtypes
 
-desempeno.boxplot() # La calificación de desempeño tiene un sesgo, cómo ya se había evidenciado sólo valoraciones de 3 y 4
+#desempeno.boxplot() # La calificación de desempeño tiene un sesgo, cómo ya se había evidenciado sólo valoraciones de 3 y 4
 
 # Gráfico de pastel
 
@@ -482,7 +482,7 @@ encuesta_empleados['JobSatisfaction'].dtype # Se comprueba el cambio
 encuesta_empleados['WorkLifeBalance']=encuesta_empleados[['WorkLifeBalance']].astype('int32')#Se realiza el cambio de tipo de dato
 encuesta_empleados['WorkLifeBalance'].dtype # Se comprueba el cambio
 
-encuesta_empleados.boxplot() #La satisfacción del ambiente y del trabajo se encuentran sesgadas y con un promedio de 3. 
+#encuesta_empleados.boxplot() #La satisfacción del ambiente y del trabajo se encuentran sesgadas y con un promedio de 3. 
 #El balance entre en trebajo y la vida personal tiene su mediana en el extremo superior significando que el 75% de sus empleados 
 #se sienten identificados con este valor. Adicionalmente, se observa que el valor mínimo es de 1 y el máximo es de 4
 
@@ -613,3 +613,6 @@ desempeno.to_csv('df_desempeno.csv')
 salidas.to_csv('df_out_time.csv')
 entradas.to_csv('df_in_time.csv')
 encuesta_empleados.to_csv('df_encuesta_empleados.csv')
+
+#Copia de los datos originales
+retirement2=retirement_info.copy()

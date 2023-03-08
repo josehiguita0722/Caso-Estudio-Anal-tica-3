@@ -5,12 +5,11 @@ Created on Mon Mar  6 22:39:44 2023
 @author: ASUS
 """
 
-import a_funciones as funciones  ###archivo de funciones propias
 import pandas as pd ### para manejo de datos
-import sqlite3 as sql
 import joblib
-import openpyxl ## para exportar a excel
 import numpy as np
+#!pip install openpyxl
+import openpyxl
 import funciones 
 
 ###### el despliegue consiste en dejar todo el código listo para una ejecucion automática en el periodo definido:
@@ -19,36 +18,26 @@ if __name__=="__main__":
 
 
     ### conectarse a la base de datos ###
-    bd=pd.read_csv('https://raw.githubusercontent.com/josehiguita0722/Caso-Estudio-Anal-tica-3/main/bd.csv')
-
-
-    ### Ejecutar sql de preprocesamiento inicial y juntarlo 
-    #### con base de preprocesamiento con la que se entrenó para evitar perdida de variables por conversión a dummies
-    
-    
-    df=pd.read_sql('''select  * from base_completa2''',conn)
-
+    rr_hh=joblib.load('data_rrhh.pkl')
+ 
   
     ####Otras transformaciones en python (imputación, dummies y seleccion de variables)
-    df_t= funciones.preparar_datos(df)
+    df_t= funciones.preparar_datos(rr_hh)
 
 
     ##Cargar modelo y predecir
-    m_lreg = joblib.load("m_lreg.pkl")
-    predicciones=m_lreg.predict(df_t)
-    pd_pred=pd.DataFrame(predicciones, columns=['pred_perf_2024'])
+    modelo_4 = joblib.load("modelo4.pkl")
+    predicciones=modelo_4.predict(df_t)
+    pd_pred=pd.DataFrame(predicciones, columns=['pred'])
 
 
     ###Crear base con predicciones ####
-
-    perf_pred=pd.concat([df['EmpID2'],df_t,pd_pred],axis=1)
-   
-    ####LLevar a BD para despliegue 
-    perf_pred.loc[:,['EmpID2', 'pred_perf_2024']].to_sql("perf_pred",conn,if_exists="replace") ## llevar predicciones a BD con ID Empleados
+    rr_hh=rr_hh.reset_index()
+    perf_pred=pd.concat([rr_hh['EmployeeID'],df_t,pd_pred],axis=1) 
+    perf_pred.to_excel("Predicciones.xlsx") ### exportar coeficientes para analizar predicciones
     
-
     ####ver_predicciones_bajas ###
-    emp_pred_bajo=perf_pred.sort_values(by=["pred_perf_2024"],ascending=True).head(10)
+    emp_pred_bajo=perf_pred.sort_values(by=["pred"],ascending=True).head(10)
     
     emp_pred_bajo.set_index('EmpID2', inplace=True) 
     pred=emp_pred_bajo.T

@@ -41,6 +41,8 @@ data_rrhh.Department = data_rrhh.Department.replace({"Human Resources": 'Dept. H
 data_rrhh.JobRole = data_rrhh.JobRole.replace({'Human Resources': 'Rol.Human Resources'})
 data_rrhh.EducationField = data_rrhh.EducationField.replace({'Human Resources': 'Educ.Human Resources'})
 
+joblib.dump(data_rrhh,'data_rrhh.pkl') 
+
 """## Label Encoding"""
 
 ohencoder = OneHotEncoder(sparse= False) #Se carga el codigo necesario para poder convertir los datos cualitativos en cuantitativos
@@ -57,6 +59,10 @@ df.head() #Se visualizan
 df2 = data_rrhh[['EnvironmentSatisfaction', 'JobSatisfaction','WorkLifeBalance', 'Age', 'DistanceFromHome', 'Education', 'JobLevel', 'MonthlyIncome', 'NumCompaniesWorked', 'PercentSalaryHike',
           'StockOptionLevel', 'TotalWorkingYears', 'TrainingTimesLastYear', 'YearsAtCompany', 'YearsSinceLastPromotion', 'YearsWithCurrManager', 'JobInvolvement', 'PerformanceRating', 'hora_ingreso', 'hora_salida', 'Resignation']] #Se toman las variables cuantitativas
 
+cuanti=list(['EnvironmentSatisfaction', 'JobSatisfaction','WorkLifeBalance', 'Age', 'DistanceFromHome', 'Education', 'JobLevel', 'MonthlyIncome', 'NumCompaniesWorked', 'PercentSalaryHike',
+          'StockOptionLevel', 'TotalWorkingYears', 'TrainingTimesLastYear', 'YearsAtCompany', 'YearsSinceLastPromotion', 'YearsWithCurrManager', 'JobInvolvement', 'PerformanceRating', 'hora_ingreso', 'hora_salida', 'Resignation'])
+
+joblib.dump(cuanti,'cuanti.pkl') 
 data_rrhh.dtypes
 
 df3 = pd.concat([df.reset_index(drop=True), df2.reset_index(drop=True)], axis = 1) #Se unen las variables cuantitativas y las cualitativas transformadas a cuantitativas
@@ -150,12 +156,12 @@ bd.to_csv('bd.csv')
 
 """---Exportaciones---"""
 
-list_cuali=['retirementType', 'Department', 'BusinessTravel', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus', 'Over18']
-joblib.dump(list_cuali, "list_cuali.pkl") ### para realizar imputacion
 list_dummies=['BusinessTravel', 'Department', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus']
 joblib.dump(list_dummies, "list_dummies.pkl") #Variables que se deben transformar a dummies
 list_variables=[]
-for i in range(len(bd.columns)-1):
+
+for i in range(len(bd.columns)):
     list_variables.append(bd.columns[i])
+    
 joblib.dump(list_variables, "list_variables.pkl") #Variables que se deben transformar a dummies
 
