@@ -324,7 +324,8 @@ for i in bd.columns:
 
 salidas=pd.DataFrame(data = horas1, index=bd.columns, columns=['horas'] )
 
-fig1=px.box(salidas) #En promedio los empleados que renunciaron tienen un rango de llegadas entre las 8:48 am y las 9:36 con un promedio de 9:13 aproximadamente
+fig1=px.box(salidas) #En promedio, los empleados que renunciaron tienen un rango de llegadas entre las 1:56 pm y las 8:03 pm con un promedio de 3:52 pm aproximadamente.
+
 fig1.show()
 
 """## Base de Datos Hora de Ingreso"""
