@@ -36,13 +36,3 @@ if __name__=="__main__":
     perf_pred=pd.concat([rr_hh['EmployeeID'],df_t,pd_pred],axis=1) 
     perf_pred.to_excel("Predicciones.xlsx") ### exportar coeficientes para analizar predicciones
     
-    ####ver_predicciones_bajas ###
-    emp_pred_bajo=perf_pred.sort_values(by=["pred"],ascending=True).head(10)
-    
-    emp_pred_bajo.set_index('EmpID2', inplace=True) 
-    pred=emp_pred_bajo.T
-    
-    coeficientes=pd.DataFrame( np.append(m_lreg.intercept_,m_lreg.coef_) , columns=['coeficientes'])  ### agregar coeficientes
-   
-    pred.to_excel("prediccion.xlsx")   #### exportar predicciones mas bajas y variables explicativas
-    coeficientes.to_excel("coeficientes.xlsx") ### exportar coeficientes para analizar predicciones

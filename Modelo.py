@@ -88,7 +88,7 @@ fd.metricas(modelo4,X_train,y_train,X_test,y_test,y_pred4)
 #El modelo predijo personas que renunciarían y si lo hicieron en un 89.2%, pero predijo personas que renunciarían y si lo hicieron en un 87%
 
 """----Afinamiento de hiperparametros---"""
-modelos=[modelo4]
+modelos=[modelo3]
 
 #DataFrame de resultados
 cols=["Case",'RandomForestClassifier']
@@ -117,11 +117,10 @@ from sklearn.model_selection import RepeatedStratifiedKFold
 #Los hiperparametros a cambiar se eligen en la sección de ayuda de cada uno de los modelos
 
 
-#RandomForest
-n_estimators = [10, 100, 1000]
-class_weight=["balanced", "balanced_subsample",None]
-max_features = ['sqrt', 'log2']
-forest_grid=dict(n_estimators=n_estimators,class_weight=class_weight,max_features=max_features)
+#KNeighborsClassifier
+n_neighbors = [5, 10, 100, 1000]
+weights=['uniform', 'distance']
+forest_grid=dict(n_neighbors=n_neighbors,weights=weights)
 
 
 
@@ -167,11 +166,11 @@ result.head()
 best=grid_search.best_estimator_
 print(best)
 
-modelo4 = modelo4.fit(X_train,y_train)
+modelo3 = modelo3.fit(X_train,y_train)
 
 """"Análisis modelo final"""
 
-fd.metricas(modelo4,X_train,y_train,X_test,y_test,y_pred4)
+fd.metricas(modelo3,X_train,y_train,X_test,y_test,y_pred3)
 # El porcentaje de acierto para el entrenemiento es del 100% lo que podría indicar un sobreajuste de los datos,
 #El porcentaje de acierto de test es del 90% lo cuál se interpreta como un modelo aceptable
 #La cantidad de personas que renunciarony y si lo hicieron fue del 99%, mientras que la cantidad e personas que se 
@@ -184,5 +183,5 @@ df3 = joblib.load("bd_df3.pkl")
 
 """---Exportaciones---"""
 joblib.dump(best,'best.pkl') #Se exportan los mejores hiperparámetros
-joblib.dump(modelo4,'modelo4.pkl') #Se exporta el ajuste del modelo 
+joblib.dump(modelo3,'modelo3.pkl') #Se exporta el ajuste del modelo 
 
